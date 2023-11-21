@@ -34,29 +34,42 @@ namespace PictouristAPI.Services
 
 		public async Task<string> AddFriendAsync(string authedName, Guid Id)
 		{
-			var follower = await _db.Users.FirstOrDefaultAsync(f => f.UserName == authedName);
+			// TODO: awaits don't load datas in time.
+			// TODO: stupid-handlers in all methods.
+			var follower = _db.Users.Include(u => u.Friends).FirstOrDefault(f => f.NormalizedUserName == authedName.ToUpper());
+			var wanted = _db.Users.Include(u => u.Friends).FirstOrDefault(w => w.Id == Id.ToString());
 
-			var wanted = await _db.Users.FirstOrDefaultAsync(u => u.Id == Id.ToString());
+			if (follower != null && wanted != null & !follower.Friends.Contains(wanted))
+			{
+				follower.Friends.Add(wanted);
 
-			follower.Friends.Add(wanted);
+				await _db.SaveChangesAsync();
 
-			await _db.SaveChangesAsync();
+				return "Success!!!";
+			}
+			else if (follower.Friends.Contains(wanted))
+			{
+				return $"{wanted.UserName} is also in {follower.UserName} friends.";
+			}
 
-			return $"Вы отправили заявку на подписку на обновления {wanted.UserName}.<br>Когда пользователь её примет," +
-				$"Вы сможете просматривать его фотографии.";
+			return null;
 		}
 
 		public async Task<string> RemoveFriendAsync(string authedName, Guid Id)
 		{
 			var follower = await _db.Users.Include(u => u.Friends).FirstOrDefaultAsync(f => f.UserName == authedName);
-
 			var wanted = await _db.Users.Include(u => u.Friends).FirstOrDefaultAsync(u => u.Id == Id.ToString());
 
-			follower.Friends.Remove(wanted);
+			if (follower != null && wanted != null)
+			{
+				follower.Friends.Remove(wanted);
 
-			await _db.SaveChangesAsync();
+				await _db.SaveChangesAsync();
 
-			return $"Вы успешно отписались от обновлений {wanted.UserName}";
+				return $"Вы успешно отписались от обновлений {wanted.UserName}";
+			}
+
+			return "Не были получены необходимые параметры: имя авторизованного пользователя, а также guid того, от кого пытаетесь подписаться.";
 		}
 	}
 }

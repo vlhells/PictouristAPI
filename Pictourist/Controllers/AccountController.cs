@@ -15,13 +15,12 @@ namespace PictouristAPI.Controllers
 			_accountService = accountService;
 		}
 
-		// TODO: check by swagger. Fix user.identity.
 		[HttpPost]
-		public async Task<IActionResult> ChangePasswordAsync(string OldPassword, string NewPassword)
+		public async Task<IActionResult> ChangePasswordAsync(string OldPassword, string NewPassword, string authedUserName)
 		{
 			var errors = string.Empty;
 
-			var result = await _accountService.ChangePasswordAsync(User.Identity.Name, OldPassword, NewPassword);
+			var result = await _accountService.ChangePasswordAsync(authedUserName, OldPassword, NewPassword);
 
 			if (result.Succeeded)
 			{

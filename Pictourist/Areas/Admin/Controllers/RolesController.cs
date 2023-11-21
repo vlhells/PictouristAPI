@@ -9,7 +9,7 @@ namespace PictouristAPI.Admin.Controllers
 	[Route("api/[controller]/[action]")]
 	[ApiController]
     [Area("Admin")]
-    [Authorize(Roles = "Admin")]
+    //[Authorize(Roles = "Admin")]
     public class RolesController : ControllerBase
     {
         private IRolesService _rolesService;

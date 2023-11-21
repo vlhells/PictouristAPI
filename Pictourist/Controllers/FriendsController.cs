@@ -8,7 +8,7 @@ namespace PictouristAPI.Controllers
 {
 	[Route("api/[controller]/[action]")]
 	[ApiController]
-	[Authorize]
+	//[Authorize]
 	public class FriendsController : ControllerBase
 	{
 		private IFriendsService _friendsService;
@@ -19,7 +19,7 @@ namespace PictouristAPI.Controllers
 		}
 
 		[HttpGet]
-		public async Task<IActionResult> IndexAsync(string Id) // "Friends/Index/Friend1", etc...
+		public async Task<IActionResult> IndexAsync(string authedUserName, string? Id) // "Friends/Index/Friend1", etc...
 		{
 			if (Id == null)
 			{
@@ -27,7 +27,7 @@ namespace PictouristAPI.Controllers
 			}
 			else
 			{
-				User u = await _friendsService.IndexAsync(User.Identity.Name, Id);
+				User u = await _friendsService.IndexAsync(authedUserName, Id);
 				if (u != null)
 				{
 					return new ObjectResult(u);
@@ -38,15 +38,24 @@ namespace PictouristAPI.Controllers
 		}
 
 		[HttpPost]
-		public async Task<IActionResult> AddFriendAsync(Guid Id)
+		public async Task<IActionResult> AddFriendAsync(string authedUserName, Guid Id)
 		{
-			return Ok(await _friendsService.AddFriendAsync(User.Identity.Name, Id));
+			var result = await _friendsService.AddFriendAsync(authedUserName, Id);
+
+			if (result != null)
+			{
+				return Ok(result);
+			}
+			else
+			{
+				return BadRequest("Не были переданы необходимые параметры: guid желаемого и (или) имя отправителя запроса.");
+			}
 		}
 
 		[HttpPost]
-		public async Task<IActionResult> RemoveFriendAsync(Guid Id)
+		public async Task<IActionResult> RemoveFriendAsync(Guid Id, string authedUserName)
 		{
-			return Ok(await _friendsService.RemoveFriendAsync(User.Identity.Name, Id));
+			return Ok(await _friendsService.RemoveFriendAsync(authedUserName, Id));
 		}
 	}
 }

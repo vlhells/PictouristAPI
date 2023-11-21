@@ -5,23 +5,20 @@ using PictouristAPI.Areas.Admin.Models;
 using PictouristAPI.Areas.Admin.Services;
 using PictouristAPI.Areas.Admin.ViewModels;
 
-namespace PictouristAPI.Admin.Controllers
+namespace PictouristAPI.Areas.Admin.Controllers
 {
 	[Route("api/[controller]/[action]")]
 	[ApiController]
 	[Area("Admin")]
-	[Authorize(Roles = "Admin")]
-	public class AdminUsersController : ControllerBase
+	//[Authorize(Roles = "Admin")]
+	public class UsersController : ControllerBase
 	{
 		private IUsersService _usersService;
 
-		public AdminUsersController(IUsersService usersService)
+		public UsersController(IUsersService usersService)
 		{
 			_usersService = usersService;
 		}
-
-		[HttpGet]
-		public async Task<IActionResult> IndexAsync() => new ObjectResult(await _usersService.IndexAsync());
 
 		[HttpGet]
 		public async Task<IActionResult> ChangePasswordAsync(string id)
