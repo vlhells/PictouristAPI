@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using PictouristAPI.Areas.Admin.Models;
 using PictouristAPI.Areas.Admin.Services;
+using PictouristAPI.ViewModels;
 
 namespace PictouristAPI.Admin.Controllers
 {
@@ -85,7 +86,7 @@ namespace PictouristAPI.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> EditAsync(string userId, List<string> roles)
         {
-            User user = await _rolesService.EditAsync(userId, roles);
+            IndexUserViewModel user = await _rolesService.EditAsync(userId, roles);
             if (user != null)
             {
                 return RedirectToAction("UserList");

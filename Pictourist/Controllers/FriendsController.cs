@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PictouristAPI.Areas.Admin.Models;
 using PictouristAPI.Services;
+using PictouristAPI.ViewModels;
 
 namespace PictouristAPI.Controllers
 {
@@ -31,7 +32,7 @@ namespace PictouristAPI.Controllers
 			}
 			else
 			{
-				User u = await _friendsService.IndexAsync(authedUserName, Id);
+                IndexUserViewModel u = await _friendsService.IndexAsync(authedUserName, Id);
 				if (u != null)
 				{
 					return new ObjectResult(u);

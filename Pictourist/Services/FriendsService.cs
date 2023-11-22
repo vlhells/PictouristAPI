@@ -1,5 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
 using PictouristAPI.Areas.Admin.Models;
+using PictouristAPI.ViewModels;
 
 namespace PictouristAPI.Services
 {
@@ -12,23 +14,35 @@ namespace PictouristAPI.Services
 			_db = db;
 		}
 
-		public async Task<IEnumerable<User>> IndexAsync()
+		public async Task<IEnumerable<IndexUserViewModel>> IndexAsync()
 		{
+			List<IndexUserViewModel> usersForView = new List<IndexUserViewModel>();
+
 			if (_db.Users.Count() != 0)
-				return await _db.Users.Include(u => u.Friends).
-				/*Where(u => (u.Friends.Contains(authedUser) && authedUser.Friends.Contains(u)))*/
-				ToListAsync();
-			return null;
+			{
+				foreach (var user in _db.Users)
+				{
+					usersForView.Add(new IndexUserViewModel(user.Id, user.UserName, user.Birthdate));
+				}
+
+				return usersForView;
+
+                //return await _db.Users.Include(u => u.Friends).
+                ///*Where(u => (u.Friends.Contains(authedUser) && authedUser.Friends.Contains(u)))*/
+                //ToListAsync();
+            }
+
+            return null;
 		}
 
-		public async Task<User> IndexAsync(string authedName, string Id) // "Friends/Index/Friend1", etc...
+		public async Task<IndexUserViewModel> IndexAsync(string authedName, string Id) // "Friends/Index/Friend1", etc...
 		{
 			var authedUser = await _db.Users.Include(u => u.Friends).FirstOrDefaultAsync(u => u.UserName == authedName);
 
 			User u = await _db.Users.Include(u => u.Friends).FirstOrDefaultAsync(x => x.Id == Id);
 			if (u != null && u.Friends.Contains(authedUser))
 			{
-				return u;
+				return new IndexUserViewModel(u.Id, u.UserName, u.Birthdate);
 			}
 
 			return null;

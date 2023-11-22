@@ -10,11 +10,12 @@ namespace PictouristAPI.ViewModels
         public string Login { get; set; }
         public int Age { get; set; }
 
-        public IndexUserViewModel(Guid Id, string Login, string Birthdate)
+        public IndexUserViewModel(string Id, string Login, string Birthdate)
 		{
-			Guid = Id.ToString();
+			Guid = Id;
 			this.Login = Login;
-			Age = ;
+			string[] bdParts = Birthdate.Split('-');
+			Age = DateTime.Now.Year - int.Parse(bdParts[0]);
 		}
 	}
 }

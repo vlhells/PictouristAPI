@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using PictouristAPI.Areas.Admin.Models;
 using PictouristAPI.Areas.Admin.ViewModels;
+using PictouristAPI.ViewModels;
 
 namespace PictouristAPI.Areas.Admin.Services
 {
@@ -47,10 +48,20 @@ namespace PictouristAPI.Areas.Admin.Services
 			return null;
 		}
 
-		public async Task<IEnumerable<User>> UserList()
+		public async Task<IEnumerable<IndexUserViewModel>> UserList()
 		{
-			if (_userManager.Users.Count() != 0)
-				return await _userManager.Users.ToListAsync();
+            List<IndexUserViewModel> usersForView = new List<IndexUserViewModel>();
+
+            if (_userManager.Users.Count() != 0)
+            {
+                foreach (var user in _userManager.Users)
+                {
+                    usersForView.Add(new IndexUserViewModel(user.Id, user.UserName, user.Birthdate));
+                }
+
+                return usersForView;
+            }
+
 			return null;
 		}
 
@@ -74,23 +85,24 @@ namespace PictouristAPI.Areas.Admin.Services
 			return null;
 		}
 
-		public async Task<User> EditAsync(string userId, List<string> roles)
+		public async Task<IndexUserViewModel> EditAsync(string userId, List<string> roles)
 		{
-			User user = null;
+			IndexUserViewModel user = null;
 
 			if (userId != null)
 			{
-				user = await _userManager.FindByIdAsync(userId);
-                if (user != null)
+				var userDb = await _userManager.FindByIdAsync(userId);
+                if (userDb != null)
                 {
-                    var userRoles = await _userManager.GetRolesAsync(user);
+					user = new IndexUserViewModel(userDb.Id, userDb.UserName, userDb.Birthdate);
+                    var userRoles = await _userManager.GetRolesAsync(userDb);
                     var allRoles = _roleManager.Roles.ToList();
                     var addedRoles = roles.Except(userRoles);
                     var removedRoles = userRoles.Except(roles);
 
-                    await _userManager.AddToRolesAsync(user, addedRoles);
+                    await _userManager.AddToRolesAsync(userDb, addedRoles);
 
-                    await _userManager.RemoveFromRolesAsync(user, removedRoles);
+                    await _userManager.RemoveFromRolesAsync(userDb, removedRoles);
 
                     return user;
                 }

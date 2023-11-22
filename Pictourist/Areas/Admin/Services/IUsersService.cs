@@ -1,12 +1,13 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using PictouristAPI.Areas.Admin.Models;
 using PictouristAPI.Areas.Admin.ViewModels;
+using PictouristAPI.ViewModels;
 
 namespace PictouristAPI.Areas.Admin.Services
 {
 	public interface IUsersService
 	{
-		public Task<IEnumerable<User>> IndexAsync();
+		public Task<IEnumerable<IndexUserViewModel>> IndexAsync();
 		public Task<User> ChangePasswordAsync(string id);
 		public Task<IdentityResult> ChangePasswordAsync(ChangePasswordViewModel model, IPasswordValidator<User> passwordValidator,
 																IPasswordHasher<User> passwordHasher);

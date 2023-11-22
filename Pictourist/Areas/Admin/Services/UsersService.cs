@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using PictouristAPI.Areas.Admin.Models;
 using PictouristAPI.Areas.Admin.ViewModels;
+using PictouristAPI.ViewModels;
 
 namespace PictouristAPI.Areas.Admin.Services
 {
@@ -51,7 +52,7 @@ namespace PictouristAPI.Areas.Admin.Services
 		{
 			User user = await _userManager.FindByIdAsync(id);
 			return user;
-		}
+        }
 
 		public async Task<IdentityResult> EditAsync(EditUserViewModel model)
 		{
@@ -84,7 +85,7 @@ namespace PictouristAPI.Areas.Admin.Services
 			return null;
 		}
 
-        public Task<IEnumerable<User>> IndexAsync()
+        public Task<IEnumerable<IndexUserViewModel>> IndexAsync()
         {
             throw new NotImplementedException();
         }

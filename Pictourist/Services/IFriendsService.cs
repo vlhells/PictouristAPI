@@ -1,12 +1,13 @@
 ﻿using PictouristAPI.Areas.Admin.Models;
+using PictouristAPI.ViewModels;
 
 namespace PictouristAPI.Services
 {
 	public interface IFriendsService
 	{
-		public Task<IEnumerable<User>> IndexAsync();
+		public Task<IEnumerable<IndexUserViewModel>> IndexAsync();
 
-		public Task<User> IndexAsync(string authedName, string Id);
+		public Task<IndexUserViewModel> IndexAsync(string authedName, string Id);
 
 		public Task<string> AddFriendAsync(string authedName, Guid Id);
 
