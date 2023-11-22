@@ -27,7 +27,7 @@ namespace PictouristAPI.Admin.Controllers
             {
                 return new ObjectResult(result);
             }
-            return BadRequest("No roles exists in db.");
+            return NotFound("No roles exists in db.");
         }
 
         [HttpPost]
@@ -67,7 +67,7 @@ namespace PictouristAPI.Admin.Controllers
             var result = await _rolesService.UserList();
             if (result != null)
                 return new ObjectResult(await _rolesService.UserList());
-            return BadRequest("No users exists in db");
+            return NotFound("No users exists in db");
         }
 
 		[HttpGet]
