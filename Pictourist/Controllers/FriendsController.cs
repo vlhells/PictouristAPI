@@ -12,18 +12,22 @@ namespace PictouristAPI.Controllers
 	public class FriendsController : ControllerBase
 	{
 		private IFriendsService _friendsService;
+		private string _badReqGuidName;
 
-		public FriendsController(IFriendsService friendsService)
+        public FriendsController(IFriendsService friendsService)
 		{
 			_friendsService = friendsService;
-		}
+			_badReqGuidName = "Не были переданы необходимые параметры: guid желаемого и (или) имя отправителя запроса.";
+        }
 
 		[HttpGet]
 		public async Task<IActionResult> IndexAsync(string authedUserName, string? Id) // "Friends/Index/Friend1", etc...
 		{
 			if (Id == null)
 			{
-				return new ObjectResult(await _friendsService.IndexAsync());
+				var result = await _friendsService.IndexAsync();
+				if (result != null)
+					return new ObjectResult(result);
 			}
 			else
 			{
@@ -34,28 +38,33 @@ namespace PictouristAPI.Controllers
 				}
 			}
 
-			return NoContent();
+			return NotFound("No users exists in db.");
 		}
 
 		[HttpPost]
 		public async Task<IActionResult> AddFriendAsync(string authedUserName, Guid Id)
 		{
-			var result = await _friendsService.AddFriendAsync(authedUserName, Id);
+			if (Id != null && authedUserName != null)
+			{
+				var result = await _friendsService.AddFriendAsync(authedUserName, Id);
 
-			if (result != null)
+				if (result != null)
+				{
+					return Ok(result);
+				}
+			}
+            return BadRequest(_badReqGuidName);
+        }
+
+		[HttpPost]
+		public async Task<IActionResult> RemoveFriendAsync(string authedUserName, Guid Id)
+		{
+			var result = await _friendsService.RemoveFriendAsync(authedUserName, Id);
+            if (result != null)
 			{
 				return Ok(result);
 			}
-			else
-			{
-				return BadRequest("Не были переданы необходимые параметры: guid желаемого и (или) имя отправителя запроса.");
-			}
-		}
-
-		[HttpPost]
-		public async Task<IActionResult> RemoveFriendAsync(Guid Id, string authedUserName)
-		{
-			return Ok(await _friendsService.RemoveFriendAsync(authedUserName, Id));
-		}
+            return BadRequest(_badReqGuidName);
+        }
 	}
 }

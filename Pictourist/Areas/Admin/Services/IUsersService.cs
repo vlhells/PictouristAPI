@@ -13,6 +13,6 @@ namespace PictouristAPI.Areas.Admin.Services
 		public Task<IdentityResult> CreateAsync(CreateUserViewModel model);
 		public Task<User> EditAsync(string id);
 		public Task<IdentityResult> EditAsync(EditUserViewModel model);
-		public Task DeleteAsync(string id);
+		public Task<string> DeleteAsync(string id);
 	}
 }

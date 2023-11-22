@@ -14,9 +14,11 @@ namespace PictouristAPI.Services
 
 		public async Task<IEnumerable<User>> IndexAsync()
 		{
-			return await _db.Users.Include(u => u.Friends).
+			if (_db.Users.Count() != 0)
+				return await _db.Users.Include(u => u.Friends).
 				/*Where(u => (u.Friends.Contains(authedUser) && authedUser.Friends.Contains(u)))*/
 				ToListAsync();
+			return null;
 		}
 
 		public async Task<User> IndexAsync(string authedName, string Id) // "Friends/Index/Friend1", etc...
@@ -34,12 +36,12 @@ namespace PictouristAPI.Services
 
 		public async Task<string> AddFriendAsync(string authedName, Guid Id)
 		{
-			// TODO: awaits don't load datas in time.
-			// TODO: stupid-handlers in all methods.
-			var follower = _db.Users.Include(u => u.Friends).FirstOrDefault(f => f.NormalizedUserName == authedName.ToUpper());
-			var wanted = _db.Users.Include(u => u.Friends).FirstOrDefault(w => w.Id == Id.ToString());
+            // TODO: stupid-handlers in all methods.
+            User follower = null;
+            User wanted = null;
+            await GetPair(follower, wanted, authedName, Id);
 
-			if (follower != null && wanted != null & !follower.Friends.Contains(wanted))
+            if (follower != null && wanted != null & !follower.Friends.Contains(wanted))
 			{
 				follower.Friends.Add(wanted);
 
@@ -55,12 +57,22 @@ namespace PictouristAPI.Services
 			return null;
 		}
 
+		private async Task GetPair(User follower, User wanted, string authedName, Guid Id)
+		{
+            using (_db)
+            {
+                follower = await _db.Users.Include(u => u.Friends).FirstOrDefaultAsync(f => f.NormalizedUserName == authedName.ToUpper());
+                wanted = await _db.Users.Include(u => u.Friends).FirstOrDefaultAsync(w => w.Id == Id.ToString());
+            }
+        }
+
 		public async Task<string> RemoveFriendAsync(string authedName, Guid Id)
 		{
-			var follower = await _db.Users.Include(u => u.Friends).FirstOrDefaultAsync(f => f.UserName == authedName);
-			var wanted = await _db.Users.Include(u => u.Friends).FirstOrDefaultAsync(u => u.Id == Id.ToString());
+			User follower = null;
+			User wanted = null;
+			await GetPair(follower, wanted, authedName, Id);
 
-			if (follower != null && wanted != null)
+			if (follower != null && wanted != null && follower.Friends.Contains(wanted))
 			{
 				follower.Friends.Remove(wanted);
 
@@ -68,8 +80,12 @@ namespace PictouristAPI.Services
 
 				return $"Вы успешно отписались от обновлений {wanted.UserName}";
 			}
+			else if (!follower.Friends.Contains(wanted))
+			{
+                return $"{follower.UserName} was not sub of {follower.UserName}.";
+            }
 
-			return "Не были получены необходимые параметры: имя авторизованного пользователя, а также guid того, от кого пытаетесь подписаться.";
+			return null;
 		}
 	}
 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using PictouristAPI.Areas.Admin.Models;
 
 namespace PictouristAPI.Services
@@ -13,13 +14,20 @@ namespace PictouristAPI.Services
 		}
 
 		public async Task<IEnumerable<User>> IndexAsync()
-		{
-			return await _db.Users.Include(u => u.Friends).ToListAsync();
+        {
+            if (_db.Users.Count() != 0)
+                return await _db.Users.Include(u => u.Friends).ToListAsync();
+            return null;
 		}
 
 		public async Task<User> MyPageAsync(string thisUserName)
 		{
-			return await _db.Users.FirstOrDefaultAsync(x => x.UserName == thisUserName);
+			User result = null;
+			if (thisUserName != null)
+			{
+				result = await _db.Users.FirstOrDefaultAsync(x => x.NormalizedUserName == thisUserName);
+			}
+			return result;
 		}
 	}
 }

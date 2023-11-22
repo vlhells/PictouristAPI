@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using PictouristAPI.Areas.Admin.Models;
 using PictouristAPI.Areas.Admin.Services;
 using PictouristAPI.Areas.Admin.ViewModels;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace PictouristAPI.Areas.Admin.Controllers
 {
@@ -23,18 +24,22 @@ namespace PictouristAPI.Areas.Admin.Controllers
 		[HttpGet]
 		public async Task<IActionResult> ChangePasswordAsync(string id)
 		{
-			User user = await _usersService.ChangePasswordAsync(id);
-			if (user == null)
+			if (id != null)
 			{
-				return NotFound();
-			}
-			ChangePasswordViewModel model = new ChangePasswordViewModel { Id = user.Id, Email = user.Email };
-			return new ObjectResult(model);
+                User user = await _usersService.ChangePasswordAsync(id);
+                if (user != null)
+                {
+                    ChangePasswordViewModel model = new ChangePasswordViewModel { Id = user.Id, Email = user.Email };
+                    return new ObjectResult(model);
+                }
+            }
+			return NotFound();
 		}
 
 		[HttpPost]
 		public async Task<IActionResult> ChangePasswordAsync(ChangePasswordViewModel model)
 		{
+			var errors = string.Empty;
 			if (ModelState.IsValid)
 			{
 				var _passwordValidator =
@@ -53,20 +58,24 @@ namespace PictouristAPI.Areas.Admin.Controllers
 					foreach (var error in result.Errors)
 					{
 						ModelState.AddModelError(string.Empty, error.Description);
-					}
+                        errors += $"{error.Description}<br>";
+                    }
 				}
 			}
 			else
 			{
-				ModelState.AddModelError(string.Empty, "Пользователь не найден");
-			}
+				var nf = "Пользователь не найден";
+                ModelState.AddModelError(string.Empty, nf);
+                errors += $"{nf}<br>";
+            }
 
-			return new ObjectResult(model);
+			return BadRequest(errors);
 		}
 
 		[HttpPost]
 		public async Task<IActionResult> CreateAsync(CreateUserViewModel model)
 		{
+			var errors = string.Empty;
 			if (ModelState.IsValid)
 			{
 				var result = await _usersService.CreateAsync(model);
@@ -79,27 +88,32 @@ namespace PictouristAPI.Areas.Admin.Controllers
 					foreach (var error in result.Errors)
 					{
 						ModelState.AddModelError(string.Empty, error.Description);
+						errors += $"{error.Description}<br>";
 					}
-				}
+                }
 			}
-			return new ObjectResult(model);
+			return BadRequest(errors);
 		}
 
 		[HttpGet]
 		public async Task<IActionResult> EditAsync(string id)
 		{
-			User user = await _usersService.EditAsync(id);
-			if (user == null)
+			if (id != null)
 			{
-				return NotFound();
-			}
-			EditUserViewModel model = new EditUserViewModel { Email = user.Email, Login = user.UserName, Birthdate = user.Birthdate };
-			return new ObjectResult(model);
+                User user = await _usersService.EditAsync(id);
+                if (user != null)
+                {
+                    EditUserViewModel model = new EditUserViewModel { Email = user.Email, Login = user.UserName, Birthdate = user.Birthdate };
+                    return new ObjectResult(model);
+                }
+            }
+			return NotFound();
 		}
 
 		[HttpPost]
 		public async Task<IActionResult> EditAsync(EditUserViewModel model)
 		{
+			var errors = string.Empty;
 			if (ModelState.IsValid)
 			{
 				var result = await _usersService.EditAsync(model);
@@ -112,17 +126,22 @@ namespace PictouristAPI.Areas.Admin.Controllers
 					foreach (var error in result.Errors)
 					{
 						ModelState.AddModelError(string.Empty, error.Description);
-					}
+                        errors += $"{error.Description}<br>";
+                    }
 				}
 			}
-			return new ObjectResult(model);
+			return BadRequest(errors);
 		}
 
 		[HttpPost]
 		public async Task<ActionResult> DeleteAsync(string id)
 		{
-			await _usersService.DeleteAsync(id);
-			return RedirectToAction("Index");
+			var result = await _usersService.DeleteAsync(id);
+			if (result != null)
+			{
+				return RedirectToAction("Index");
+			}
+			return NotFound();
 		}
 	}
 }

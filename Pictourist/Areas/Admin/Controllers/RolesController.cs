@@ -20,11 +20,20 @@ namespace PictouristAPI.Admin.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> IndexAsync() => new ObjectResult(await _rolesService.IndexAsync());
+        public async Task<IActionResult> IndexAsync()
+        {
+            var result = await _rolesService.IndexAsync();
+            if (result != null)
+            {
+                return new ObjectResult(result);
+            }
+            return BadRequest("No roles exists in db.");
+        }
 
         [HttpPost]
         public async Task<IActionResult> CreateAsync(string name)
         {
+            var errors = string.Empty;
 			IdentityResult result = await _rolesService.CreateAsync(name);
 			if (result.Succeeded)
 			{
@@ -35,20 +44,31 @@ namespace PictouristAPI.Admin.Controllers
 				foreach (var error in result.Errors)
 				{
 					ModelState.AddModelError(string.Empty, error.Description);
-				}
+                    errors += $"{error.Description}<br>";
+                }
 			}
-			return new ObjectResult(name);
+			return BadRequest(errors);
         }
 
         [HttpPost]
         public async Task<IActionResult> DeleteAsync(string id)
         {
-            await _rolesService.DeleteAsync(id);
-            return RedirectToAction("Index");
+            var result = await _rolesService.DeleteAsync(id);
+            if (result != null)
+            {
+                return RedirectToAction("Index");
+            }
+            return NotFound("Incorrect role id");
         }
 
         [HttpGet]
-        public async Task<IActionResult> UserList() => new ObjectResult(await _rolesService.UserList());
+        public async Task<IActionResult> UserList()
+        {
+            var result = await _rolesService.UserList();
+            if (result != null)
+                return new ObjectResult(await _rolesService.UserList());
+            return BadRequest("No users exists in db");
+        }
 
 		[HttpGet]
 		public async Task<IActionResult> EditAsync(string userId) // ...

@@ -14,15 +14,9 @@ namespace PictouristAPI.Areas.Admin.Services
 			_userManager = userManager;
 		}
 
-		public async Task<IEnumerable<User>> IndexAsync() => await _userManager.Users.ToListAsync();
-
 		public async Task<User> ChangePasswordAsync(string id)
 		{
 			User user = await _userManager.FindByIdAsync(id);
-			if (user == null)
-			{
-				return null;
-			}
 			return user;
 		}
 
@@ -56,10 +50,6 @@ namespace PictouristAPI.Areas.Admin.Services
 		public async Task<User> EditAsync(string id)
 		{
 			User user = await _userManager.FindByIdAsync(id);
-			if (user == null)
-			{
-				return null;
-			}
 			return user;
 		}
 
@@ -80,13 +70,23 @@ namespace PictouristAPI.Areas.Admin.Services
 			return null;
 		}
 
-		public async Task DeleteAsync(string id)
+		public async Task<string> DeleteAsync(string id)
 		{
-			User user = await _userManager.FindByIdAsync(id);
-			if (user != null)
+			if (id != null)
 			{
-				await _userManager.DeleteAsync(user);
+				User user = await _userManager.FindByIdAsync(id);
+				if (user != null)
+				{
+					await _userManager.DeleteAsync(user);
+					return "Success";
+				}
 			}
+			return null;
 		}
-	}
+
+        public Task<IEnumerable<User>> IndexAsync()
+        {
+            throw new NotImplementedException();
+        }
+    }
 }

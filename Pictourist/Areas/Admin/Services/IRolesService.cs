@@ -10,7 +10,7 @@ namespace PictouristAPI.Areas.Admin.Services
 
 		public Task<IdentityResult> CreateAsync(string name);
 
-		public Task DeleteAsync(string id);
+		public Task<string> DeleteAsync(string id);
 
 		public Task<IEnumerable<User>> UserList();
 

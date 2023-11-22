@@ -20,9 +20,13 @@ namespace PictouristAPI.Services
 
 		public async Task<IdentityResult> ChangePasswordAsync(string UserName, string OldPassword, string NewPassword)
 		{
-			User user = await _userManager.FindByNameAsync(UserName);
-			IdentityResult result =
-					await _userManager.ChangePasswordAsync(user, OldPassword, NewPassword);
+			IdentityResult result = null;
+            if (UserName != null)
+			{
+				User user = await _userManager.FindByNameAsync(UserName);
+				result =
+						await _userManager.ChangePasswordAsync(user, OldPassword, NewPassword);
+			}
 			return result;
 		}
 

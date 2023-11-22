@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PictouristAPI.Services;
 using PictouristAPI.ViewModels;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace PictouristAPI.Controllers
 {
@@ -26,17 +28,17 @@ namespace PictouristAPI.Controllers
 			{
 				return Ok("Вы успешно сменили пароль.");
 			}
-			else
-			{
-				//ModelState.AddModelError(string.Empty, "Неверный пароль");
-				//foreach (var error in result.Errors)
-				//{
-				//    errors += $"{error.Description}<br>";
-				//}
-				errors += "Неверный пароль";
-			}
+			//else
+			//{
+			//	//ModelState.AddModelError(string.Empty, "Неверный пароль");
+			//	//foreach (var error in result.Errors)
+			//	//{
+			//	//    errors += $"{error.Description}<br>";
+			//	//}
+			//	errors += "Неверный пароль";
+			//}
 
-			return Content(errors);
+			return BadRequest("Incorrect data.");
 		}
 
 		[HttpGet]
@@ -49,6 +51,7 @@ namespace PictouristAPI.Controllers
 		//[ValidateAntiForgeryToken]
 		public async Task<IActionResult> LoginAsync(LoginViewModel model)
 		{
+			var errors = string.Empty;
 			if (ModelState.IsValid)
 			{
 				var result =
@@ -67,15 +70,18 @@ namespace PictouristAPI.Controllers
 				}
 				else
 				{
-					ModelState.AddModelError("", "Неверный логин и (или) пароль");
-				}
+					string err = "Неверный логин и (или) пароль";
+                    ModelState.AddModelError("", err);
+                    errors += $"{err}<br>";
+                }
 			}
 
-			return new ObjectResult(model);
+			return BadRequest(errors);
 		}
 
 		[HttpPost] // TODO: check by swagger.
 		//[ValidateAntiForgeryToken]
+		//[Authorize]
 		public async Task<IActionResult> LogoutAsync()
 		{
 			await _accountService.LogoutAsync();
@@ -85,6 +91,7 @@ namespace PictouristAPI.Controllers
 		[HttpPost]
 		public async Task<IActionResult> RegisterAsync(RegisterViewModel model)
 		{
+			var errors = string.Empty;
 			if (ModelState.IsValid)
 			{
 				var result = await _accountService.RegisterAsync(model);
@@ -97,10 +104,11 @@ namespace PictouristAPI.Controllers
 					foreach (var error in result.Errors)
 					{
 						ModelState.AddModelError(string.Empty, error.Description);
-					}
+                        errors += $"{error.Description}<br>";
+                    }
 				}
 			}
-			return new ObjectResult(model);
+			return BadRequest(errors);
 		}
     }
 }

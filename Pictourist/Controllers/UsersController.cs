@@ -20,13 +20,23 @@ namespace PictouristAPI.Controllers
 		[HttpGet]
 		public async Task<IActionResult> IndexAsync()
 		{
-			return new ObjectResult(await _usersService.IndexAsync());
+			var result = await _usersService.IndexAsync();
+            if (result != null)
+            {
+                return new ObjectResult(result);
+            }
+            return BadRequest("No users exists in db.");
 		}
 
 		[HttpGet]
-		public async Task<IActionResult> MyPageAsync()
+		public async Task<IActionResult> MyPageAsync(string authedUserName)
 		{
-			return new ObjectResult(await _usersService.MyPageAsync(User.Identity.Name));
+			var result = await _usersService.MyPageAsync(authedUserName);
+			if (result != null)
+			{
+                return new ObjectResult(result);
+            }
+			return BadRequest("You are not authentified.");
 		}
 	}
 }
