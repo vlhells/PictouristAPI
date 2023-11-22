@@ -13,8 +13,6 @@ namespace PictouristAPI
 		{
 			//TODO:
 
-			// Docker.
-
 			// Upload and watch images.
 			// Chattin w/ Signal(?)
 			// Likes/Comms.
