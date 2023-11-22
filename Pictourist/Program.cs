@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 using PictouristAPI.Areas.Admin.Models;
 using PictouristAPI.Areas.Admin.Services;
 using PictouristAPI.Services;
@@ -12,8 +13,6 @@ namespace PictouristAPI
 		{
 			//TODO:
 
-			// Swagger test controllers + Docs.
-			// XML summary etc.
 			// Docker.
 
 			// Upload and watch images.
@@ -26,12 +25,25 @@ namespace PictouristAPI
 
 			string connection = builder.Configuration.GetConnectionString("DefaultConnection");
 
-			//builder.Services.AddDbContext<PictouristContext>(options =>
-			//	options.UseSqlServer(connection));
+            //builder.Services.AddDbContext<PictouristContext>(options =>
+            //	options.UseSqlServer(connection));
 
-			builder.Services.AddSwaggerGen();
+            builder.Services.AddSwaggerGen(options =>
+            {
+                options.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Version = "v1",
+                    Title = "Pictourist API",
+                    Description = "API for Pictourist social network.",
+                    Contact = new OpenApiContact
+                    {
+                        Name = "Authors' personal telegram",
+                        Url = new Uri("https://t.me/VladislavGashenko")
+                    }
+                });
+            });
 
-			builder.Services.AddDbContext<PictouristContext>(options => options.UseNpgsql(connection));
+            builder.Services.AddDbContext<PictouristContext>(options => options.UseNpgsql(connection));
 
             builder.Services.AddTransient<IUserValidator<User>, MyUserValidator>();
 
