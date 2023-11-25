@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using PictouristAPI.Services;
@@ -19,16 +20,29 @@ namespace PictouristAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> LoadPic(FormFileCollection files)
+        public async Task<IActionResult> LoadPic(FormFileCollection files, string loaderGuid)
         {
-            var result = await _picturesService.LoadPicture(files);
-            if (result)
+            var result = await _picturesService.LoadPicture(files, loaderGuid);
+            if (result.All(r => r == false))
             {
-                return Ok("Successfully loaded pictures!");
+				return BadRequest("No pictures were uploaded because of incorrect data-format.");
+			}
+            else if (result.Any(r => r == true))
+            {
+                string preRes = "Photos num. ";
+                for (int i = 0; i < result.Count; i++)
+                {
+                    if (result[i] == true)
+                    {
+                        preRes += $"{i}, ";
+                    }
+                }
+                preRes += " were successfully loaded. Other had incorrect data.";
+                return BadRequest(preRes);
             }
 
-            return BadRequest("Some troubles");
-        }
+			return Ok("Successfully loaded all pictures!");
+		}
     }
 }
 

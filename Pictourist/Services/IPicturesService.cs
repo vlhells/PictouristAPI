@@ -3,7 +3,7 @@ namespace PictouristAPI.Services
 {
 	public interface IPicturesService
 	{
-		public Task<bool> LoadPicture(FormFileCollection files, string loaderGuid);
+		public Task<List<bool>> LoadPicture(FormFileCollection files, string loaderGuid);
 	}
 }
 

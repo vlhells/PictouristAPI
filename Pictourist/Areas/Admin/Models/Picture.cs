@@ -9,9 +9,9 @@ namespace PictouristAPI.Areas.Admin.Models
 	{
 		[Key]
 		public int Id { get; set; }
-		public string FirstLoaderGuid { get; set; }
+		//public string FirstLoaderGuid { get; set; }
 		public string PathToFile { get; set; }
-		public List<User> Users { get; set; }
+		public List<User> Users { get; set; } = new();
 
 		public Picture()
 		{
