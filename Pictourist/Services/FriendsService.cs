@@ -22,27 +22,32 @@ namespace PictouristAPI.Services
 			{
 				foreach (var user in _db.Users)
 				{
-					usersForView.Add(new IndexUserViewModel(user.Id, user.UserName, user.Birthdate));
+					usersForView.Add(new IndexUserViewModel(user.Id, user.UserName, user.Birthdate, user.Pictures));
 				}
 
 				return usersForView;
 
-                //return await _db.Users.Include(u => u.Friends).
-                ///*Where(u => (u.Friends.Contains(authedUser) && authedUser.Friends.Contains(u)))*/
-                //ToListAsync();
-            }
+				//return await _db.Users.Include(u => u.Friends).
+				///*Where(u => (u.Friends.Contains(authedUser) && authedUser.Friends.Contains(u)))*/
+				//ToListAsync();
 
-            return null;
+
+			}
+
+			return null;
 		}
 
 		public async Task<IndexUserViewModel> IndexAsync(string authedName, string Id) // "Friends/Index/Friend1", etc...
 		{
-			var authedUser = await _db.Users.Include(u => u.Friends).FirstOrDefaultAsync(u => u.UserName == authedName);
+			User authedUser = null;
+			User u = null;
 
-			User u = await _db.Users.Include(u => u.Friends).FirstOrDefaultAsync(x => x.Id == Id);
+			authedUser = await _db.Users.Include(u => u.Friends).FirstOrDefaultAsync(u => u.UserName == authedName);
+
+			u = await _db.Users.Include(u => u.Friends).FirstOrDefaultAsync(x => x.Id == Id);
 			if (u != null && u.Friends.Contains(authedUser))
 			{
-				return new IndexUserViewModel(u.Id, u.UserName, u.Birthdate);
+				return new IndexUserViewModel(u.Id, u.UserName, u.Birthdate, u.Pictures);
 			}
 
 			return null;

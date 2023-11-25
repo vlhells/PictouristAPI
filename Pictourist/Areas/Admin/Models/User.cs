@@ -12,45 +12,7 @@ namespace PictouristAPI.Areas.Admin.Models
         public string Birthdate { get; private set; }
 
         public List<User> Friends { get; } = new();
-        public List<Picture> Pictures { get; set; }
-
-        //private List<string> _friends;
-
-        //public string Friends
-        //{
-        //	get
-        //	{
-        //              return String.Join(';', _friends);
-        //          }
-        //	private set
-        //	{
-
-        //          }
-        //}
-
-        //private List<string> _userPhotos;
-
-        //public string UserPhotos
-        //{
-        //	get
-        //	{
-        //              return String.Join(';', _userPhotos);
-        //          }
-        //	private set
-        //	{
-
-        //	}
-        //}
-
-        //public void AddFriend(string id)
-        //{
-        //          _friends = id.Split(';').ToList();
-        //      }
-
-        //public void AddPhoto()
-        //{
-        //          _userPhotos = value.Split(';').ToList();
-        //      }
+        public List<Picture> Pictures { get; set; } = new();
 
         public User()
         {
@@ -59,8 +21,6 @@ namespace PictouristAPI.Areas.Admin.Models
 
         public User(ViewModel model)
         {
-            //_userPhotos = new List<string>();
-            //_friends = new List<string>();
             Birthdate = model.Birthdate;
             Email = model.Email;
             UserName = model.Login;

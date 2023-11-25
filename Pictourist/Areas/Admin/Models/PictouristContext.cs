@@ -3,14 +3,14 @@ using Microsoft.EntityFrameworkCore;
 
 namespace PictouristAPI.Areas.Admin.Models
 {
-    public class PictouristContext : IdentityDbContext<User>
-    {
+	public class PictouristContext : IdentityDbContext<User>
+	{
 		public DbSet<Picture> Pictures { get; set; }
 
-        public PictouristContext(DbContextOptions<PictouristContext> options) : base(options)
-        {
-            Database.EnsureCreated();
-        }
+		public PictouristContext(DbContextOptions<PictouristContext> options) : base(options)
+		{
+			Database.EnsureCreated();
+		}
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
@@ -19,7 +19,11 @@ namespace PictouristAPI.Areas.Admin.Models
 			modelBuilder.Entity<User>()
 				.HasMany(e => e.Friends)
 				.WithMany();
-        }
+
+			modelBuilder.Entity<User>()
+				.HasMany(e => e.Pictures)
+				.WithMany();
+		}
 
 		//protected override void OnModelCreating(ModelBuilder builder)
 		//{

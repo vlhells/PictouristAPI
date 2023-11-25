@@ -11,7 +11,6 @@ namespace PictouristAPI.Areas.Admin.Models
 		public int Id { get; set; }
 		//public string FirstLoaderGuid { get; set; }
 		public string PathToFile { get; set; }
-		public List<User> Users { get; set; } = new();
 
 		public Picture()
 		{

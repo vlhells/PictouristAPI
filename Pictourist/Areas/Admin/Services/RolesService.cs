@@ -56,7 +56,7 @@ namespace PictouristAPI.Areas.Admin.Services
             {
                 foreach (var user in _userManager.Users)
                 {
-                    usersForView.Add(new IndexUserViewModel(user.Id, user.UserName, user.Birthdate));
+                    usersForView.Add(new IndexUserViewModel(user.Id, user.UserName, user.Birthdate, user.Pictures));
                 }
 
                 return usersForView;
@@ -94,7 +94,7 @@ namespace PictouristAPI.Areas.Admin.Services
 				var userDb = await _userManager.FindByIdAsync(userId);
                 if (userDb != null)
                 {
-					user = new IndexUserViewModel(userDb.Id, userDb.UserName, userDb.Birthdate);
+					user = new IndexUserViewModel(userDb.Id, userDb.UserName, userDb.Birthdate, userDb.Pictures);
                     var userRoles = await _userManager.GetRolesAsync(userDb);
                     var allRoles = _roleManager.Roles.ToList();
                     var addedRoles = roles.Except(userRoles);

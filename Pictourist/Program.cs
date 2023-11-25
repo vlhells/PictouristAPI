@@ -7,13 +7,13 @@ using PictouristAPI.Services;
 
 namespace PictouristAPI
 {
-    public class Program
+	public class Program
 	{
 		public static async Task Main()
 		{
 			//TODO:
 
-			// Upload and watch images.
+			// Usings and db instance think.
 			// Chattin w/ Signal(?)
 			// Likes/Comms.
 
@@ -23,27 +23,27 @@ namespace PictouristAPI
 
 			string connection = builder.Configuration.GetConnectionString("DefaultConnection");
 
-            //builder.Services.AddDbContext<PictouristContext>(options =>
-            //	options.UseSqlServer(connection));
+			//builder.Services.AddDbContext<PictouristContext>(options =>
+			//	options.UseSqlServer(connection));
 
-            builder.Services.AddSwaggerGen(options =>
-            {
-                options.SwaggerDoc("v1", new OpenApiInfo
-                {
-                    Version = "v1",
-                    Title = "Pictourist API",
-                    Description = "API for Pictourist social network.",
-                    Contact = new OpenApiContact
-                    {
-                        Name = "Authors' personal telegram",
-                        Url = new Uri("https://t.me/VladislavGashenko")
-                    }
-                });
-            });
+			builder.Services.AddSwaggerGen(options =>
+			{
+				options.SwaggerDoc("v1", new OpenApiInfo
+				{
+					Version = "v1",
+					Title = "Pictourist API",
+					Description = "API for Pictourist social network.",
+					Contact = new OpenApiContact
+					{
+						Name = "Authors' personal telegram",
+						Url = new Uri("https://t.me/VladislavGashenko")
+					}
+				});
+			});
 
-            builder.Services.AddDbContext<PictouristContext>(options => options.UseNpgsql(connection));
+			builder.Services.AddDbContext<PictouristContext>(options => options.UseNpgsql(connection));
 
-            builder.Services.AddTransient<IUserValidator<User>, MyUserValidator>();
+			builder.Services.AddTransient<IUserValidator<User>, MyUserValidator>();
 
 			builder.Services.AddScoped<IFriendsService, FriendsService>();
 			builder.Services.AddScoped<IAccountService, AccountService>();
@@ -62,9 +62,12 @@ namespace PictouristAPI
 			})
 			.AddEntityFrameworkStores<PictouristContext>();
 
-			builder.Services.AddControllers();
 
-            var app = builder.Build();
+			builder.Services.AddControllers().AddNewtonsoftJson(options =>
+						options.SerializerSettings.ReferenceLoopHandling = 
+						Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+
+			var app = builder.Build();
 
 			app.UseStatusCodePages();
 
@@ -84,24 +87,24 @@ namespace PictouristAPI
 				endpoints.MapControllers();
 			});
 
-            using (var scope = app.Services.CreateScope()) // Init db w/ roles and admin if db clean.
-            {
-                var services = scope.ServiceProvider;
+			using (var scope = app.Services.CreateScope()) // Init db w/ roles and admin if db clean.
+			{
+				var services = scope.ServiceProvider;
 
-                try
-                {
-                    var userManager = services.GetRequiredService<UserManager<User>>();
-                    var rolesManager = services.GetRequiredService<RoleManager<IdentityRole>>();
-                    await InitDbService.InitializeAsync(userManager, rolesManager);
-                }
-                catch (Exception ex)
-                {
-                    var logger = services.GetRequiredService<ILogger<Program>>();
-                    logger.LogError(ex, "An error occurred while seeding the database.");
-                }
-            }
+				try
+				{
+					var userManager = services.GetRequiredService<UserManager<User>>();
+					var rolesManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+					await InitDbService.InitializeAsync(userManager, rolesManager);
+				}
+				catch (Exception ex)
+				{
+					var logger = services.GetRequiredService<ILogger<Program>>();
+					logger.LogError(ex, "An error occurred while seeding the database.");
+				}
+			}
 
-            app.Run();
+			app.Run();
 		}
 	}
 }

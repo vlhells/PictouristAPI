@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using PictouristAPI.Services;
 
 namespace PictouristAPI.Controllers
@@ -22,10 +17,14 @@ namespace PictouristAPI.Controllers
         [HttpPost]
         public async Task<IActionResult> LoadPic(FormFileCollection files, string loaderGuid)
         {
-            var result = await _picturesService.LoadPicture(files, loaderGuid);
+            var result = await _picturesService.LoadPictureAsync(files, loaderGuid);
             if (result.All(r => r == false))
             {
 				return BadRequest("No pictures were uploaded because of incorrect data-format.");
+			}
+            else if (result.All(r => r == true))
+            {
+				return Ok("Successfully loaded all pictures!");
 			}
             else if (result.Any(r => r == true))
             {
@@ -41,8 +40,32 @@ namespace PictouristAPI.Controllers
                 return BadRequest(preRes);
             }
 
-			return Ok("Successfully loaded all pictures!");
+            return NoContent();
 		}
-    }
+
+        [HttpGet]
+        public async Task<IActionResult> User(string userGuid) // localhost:port/Pictures/User/userGuid -- pictures of user.
+        {
+            var result = await _picturesService.GetUserPicturesAsync(userGuid);
+            if (result != null)
+            {
+                return Ok(result);
+            }
+
+            return NotFound();
+        }
+
+		[HttpPost]
+		public async Task<IActionResult> Delete(string pictureId, string actionerGuid)
+		{
+			var result = await _picturesService.DeletePictureAsync(pictureId, actionerGuid);
+			if (result)
+			{
+				return Ok("Successfully deleted picture.");
+			}
+
+			return NotFound();
+		}
+	}
 }
 

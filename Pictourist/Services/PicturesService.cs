@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PictouristAPI.Areas.Admin.Models;
+using PictouristAPI.ViewModels;
 using System;
 using System.Drawing;
 using System.Security.Cryptography;
@@ -18,7 +19,6 @@ namespace PictouristAPI.Services
 			_appConfiguration = appConfiguration;
 		}
 
-		// TODO: not correct work.
 		private bool IsFileAnImage(string filePath)
 		{
 			Image image;
@@ -34,7 +34,7 @@ namespace PictouristAPI.Services
 			return true;
 		}
 
-		public async Task<List<bool>> LoadPicture(FormFileCollection files, string loaderGuid)
+		public async Task<List<bool>> LoadPictureAsync(FormFileCollection files, string loaderGuid)
 		{
 			List<bool> resultsOfLoadings = new List<bool>();
 			resultsOfLoadings.Clear();
@@ -47,7 +47,9 @@ namespace PictouristAPI.Services
 
 				User user = null;
 				if (loaderGuid != null)
+				{
 					user = await _db.Users.FirstOrDefaultAsync(u => u.Id == loaderGuid);
+				}
 				if (user != null)
 				{
 					// File loadin:
@@ -78,10 +80,10 @@ namespace PictouristAPI.Services
 						{
 							Picture p = new Picture
 							{
-								//FirstLoaderGuid = loaderGuid,
+								//FirstLoaderGuid = loaderGuid, -- for no-duplicating case.
 								PathToFile = $"./{file.FileName}"
 							};
-							p.Users.Add(user);
+							user.Pictures.Add(p);
 							await _db.Pictures.AddAsync(p);
 							await _db.SaveChangesAsync();
 							resultsOfLoadings.Add(true);
@@ -97,5 +99,46 @@ namespace PictouristAPI.Services
 			return resultsOfLoadings;
 		}
 
+		public async Task<IndexUserViewModel> GetUserPicturesAsync(string userGuid)
+		{
+			if (userGuid != null)
+			{
+				if (_db.Users.Count() != 0)
+				{
+					var usersWithPictures = _db.Users.Include(u => u.Pictures);
+					var thisUser = await usersWithPictures.FirstOrDefaultAsync(u => u.Id == userGuid);
+					if (thisUser != null)
+					{
+						return new IndexUserViewModel(thisUser.Id, thisUser.UserName, thisUser.Birthdate, thisUser.Pictures);
+					}
+				}
+			}
+			return null;
+		}
+
+		public async Task<bool> DeletePictureAsync(string pictureId, string actionerGuid)
+		{
+			if (actionerGuid != null && pictureId != null)
+			{
+				User user = null;
+				Picture pic = null;
+				user = await _db.Users.Include(u => u.Pictures).FirstOrDefaultAsync(u => u.Id == actionerGuid);
+				pic = await _db.Pictures.FirstOrDefaultAsync(p => p.Id == int.Parse(pictureId));
+
+				if (user != null && pic != null)
+				{
+					if (user.Pictures.Contains(pic))
+					{
+						user.Pictures.Remove(pic);
+						using (_db)
+						{
+							await _db.SaveChangesAsync();
+						}
+						return true;
+					}
+				}
+			}
+			return false;
+		}
 	}
 }
