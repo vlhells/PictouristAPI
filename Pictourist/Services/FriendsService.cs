@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using PictouristAPI.Areas.Admin.Models;
 using PictouristAPI.ViewModels;
 
@@ -59,9 +58,9 @@ namespace PictouristAPI.Services
 			{
 				User follower = null;
 				User wanted = null;
-				await GetPair(follower, wanted, authedName, Id);
+				(follower, wanted) = await GetPair(authedName, Id);
 
-				if (follower != null && wanted != null & !follower.Friends.Contains(wanted))
+				if (follower != null && wanted != null & !follower.Friends.Contains(wanted) && follower.Id != wanted.Id)
 				{
 					follower.Friends.Add(wanted);
 
@@ -78,13 +77,16 @@ namespace PictouristAPI.Services
 			return null;
 		}
 
-		private async Task GetPair(User follower, User wanted, string authedName, Guid Id)
+		private async Task<(User follower, User wanted)> GetPair(string authedName, Guid Id)
 		{
+			User follower = null;
+			User wanted = null;
             using (_db)
             {
                 follower = await _db.Users.Include(u => u.Friends).FirstOrDefaultAsync(f => f.NormalizedUserName == authedName.ToUpper());
                 wanted = await _db.Users.Include(u => u.Friends).FirstOrDefaultAsync(w => w.Id == Id.ToString());
             }
+			return (follower, wanted);
         }
 
 		public async Task<string> RemoveFriendAsync(string authedName, Guid Id)
@@ -93,9 +95,9 @@ namespace PictouristAPI.Services
 			{
 				User follower = null;
 				User wanted = null;
-				await GetPair(follower, wanted, authedName, Id);
+				(follower, wanted) = await GetPair(authedName, Id);
 
-				if (follower != null && wanted != null && follower.Friends.Contains(wanted))
+				if (follower != null && wanted != null && follower.Friends.Contains(wanted) && follower.Id != wanted.Id)
 				{
 					follower.Friends.Remove(wanted);
 

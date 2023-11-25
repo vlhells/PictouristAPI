@@ -18,7 +18,7 @@ namespace PictouristAPI.Controllers
         public FriendsController(IFriendsService friendsService)
 		{
 			_friendsService = friendsService;
-			_badReqGuidName = "Не были переданы необходимые параметры: guid желаемого и (или) имя отправителя запроса.";
+			_badReqGuidName = "Input params error.";
         }
 
 		[HttpGet]
