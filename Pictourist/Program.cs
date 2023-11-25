@@ -52,6 +52,7 @@ namespace PictouristAPI
 										PictouristAPI.Areas.Admin.Services.UsersService>();
 			builder.Services.AddScoped<PictouristAPI.Services.IUsersService,
 							PictouristAPI.Services.UsersService>();
+			builder.Services.AddScoped<IPicturesService, PicturesService>();
 
 			//builder.Services.AddTransient<IPasswordValidator<User>, MyPasswordValidator>();
 
