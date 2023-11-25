@@ -17,7 +17,9 @@ namespace PictouristAPI.Areas.Admin.Services
 
 		public async Task<User> ChangePasswordAsync(string id)
 		{
-			User user = await _userManager.FindByIdAsync(id);
+			User user = null;
+            if (id != null)
+				user = await _userManager.FindByIdAsync(id);
 			return user;
 		}
 
@@ -50,7 +52,9 @@ namespace PictouristAPI.Areas.Admin.Services
 
 		public async Task<User> EditAsync(string id)
 		{
-			User user = await _userManager.FindByIdAsync(id);
+			User user = null;
+			if (id != null)
+				user = await _userManager.FindByIdAsync(id);
 			return user;
         }
 

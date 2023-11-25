@@ -50,22 +50,24 @@ namespace PictouristAPI.Services
 
 		public async Task<string> AddFriendAsync(string authedName, Guid Id)
 		{
-            // TODO: stupid-handlers in all methods.
-            User follower = null;
-            User wanted = null;
-            await GetPair(follower, wanted, authedName, Id);
-
-            if (follower != null && wanted != null & !follower.Friends.Contains(wanted))
+			if (Id != null && authedName != null)
 			{
-				follower.Friends.Add(wanted);
+				User follower = null;
+				User wanted = null;
+				await GetPair(follower, wanted, authedName, Id);
 
-				await _db.SaveChangesAsync();
+				if (follower != null && wanted != null & !follower.Friends.Contains(wanted))
+				{
+					follower.Friends.Add(wanted);
 
-				return "Success!!!";
-			}
-			else if (follower.Friends.Contains(wanted))
-			{
-				return $"{wanted.UserName} is also in {follower.UserName} friends.";
+					await _db.SaveChangesAsync();
+
+					return "Success!!!";
+				}
+				else if (follower.Friends.Contains(wanted))
+				{
+					return $"{wanted.UserName} is also in {follower.UserName} friends.";
+				}
 			}
 
 			return null;
@@ -82,22 +84,25 @@ namespace PictouristAPI.Services
 
 		public async Task<string> RemoveFriendAsync(string authedName, Guid Id)
 		{
-			User follower = null;
-			User wanted = null;
-			await GetPair(follower, wanted, authedName, Id);
-
-			if (follower != null && wanted != null && follower.Friends.Contains(wanted))
+			if (Id != null && authedName != null)
 			{
-				follower.Friends.Remove(wanted);
+				User follower = null;
+				User wanted = null;
+				await GetPair(follower, wanted, authedName, Id);
 
-				await _db.SaveChangesAsync();
+				if (follower != null && wanted != null && follower.Friends.Contains(wanted))
+				{
+					follower.Friends.Remove(wanted);
 
-				return $"Вы успешно отписались от обновлений {wanted.UserName}";
+					await _db.SaveChangesAsync();
+
+					return $"Вы успешно отписались от обновлений {wanted.UserName}";
+				}
+				else if (!follower.Friends.Contains(wanted))
+				{
+					return $"{follower.UserName} was not sub of {follower.UserName}.";
+				}
 			}
-			else if (!follower.Friends.Contains(wanted))
-			{
-                return $"{follower.UserName} was not sub of {follower.UserName}.";
-            }
 
 			return null;
 		}

@@ -5,7 +5,7 @@ namespace PictouristAPI.Areas.Admin.Models
 {
     public class PictouristContext : IdentityDbContext<User>
     {
-        //public DbSet<Friend> Friends { get; set; }
+		public DbSet<Picture> Pictures { get; set; }
 
         public PictouristContext(DbContextOptions<PictouristContext> options) : base(options)
         {
@@ -19,10 +19,7 @@ namespace PictouristAPI.Areas.Admin.Models
 			modelBuilder.Entity<User>()
 				.HasMany(e => e.Friends)
 				.WithMany();
-
-			//modelBuilder.Entity<User>()
-			//	.HasMany(e => e.PicturesPaths).WithOne();
-		}
+        }
 
 		//protected override void OnModelCreating(ModelBuilder builder)
 		//{
@@ -30,10 +27,5 @@ namespace PictouristAPI.Areas.Admin.Models
 		//    .Metadata.FindNavigation(nameof(User.UserPhotos))
 		//    .SetPropertyAccessMode(PropertyAccessMode.Field);
 		//}
-
-		//protected override void OnModelCreating(ModelBuilder builder)
-		//      {
-		//          builder.Entity<Friend>().HasKey(f => new { f.FirstFriendId, f.SecondFriendId });
-		//      }
 	}
 }

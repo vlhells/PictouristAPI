@@ -24,16 +24,13 @@ namespace PictouristAPI.Areas.Admin.Controllers
 		[HttpGet]
 		public async Task<IActionResult> ChangePasswordAsync(string id)
 		{
-			if (id != null)
-			{
-                User user = await _usersService.ChangePasswordAsync(id);
-                if (user != null)
-                {
-                    ChangePasswordViewModel model = new ChangePasswordViewModel { Id = user.Id, Email = user.Email };
-                    return new ObjectResult(model);
-                }
+            User user = await _usersService.ChangePasswordAsync(id);
+            if (user != null)
+            {
+                ChangePasswordViewModel model = new ChangePasswordViewModel { Id = user.Id, Email = user.Email };
+                return new ObjectResult(model);
             }
-			return NotFound();
+            return NotFound();
 		}
 
 		[HttpPost]
@@ -98,16 +95,13 @@ namespace PictouristAPI.Areas.Admin.Controllers
 		[HttpGet]
 		public async Task<IActionResult> EditAsync(string id)
 		{
-			if (id != null)
-			{
-                User user = await _usersService.EditAsync(id);
-                if (user != null)
-                {
-                    EditUserViewModel model = new EditUserViewModel { Email = user.Email, Login = user.UserName, Birthdate = user.Birthdate };
-                    return new ObjectResult(model);
-                }
+            User user = await _usersService.EditAsync(id);
+            if (user != null)
+            {
+                EditUserViewModel model = new EditUserViewModel { Email = user.Email, Login = user.UserName, Birthdate = user.Birthdate };
+                return new ObjectResult(model);
             }
-			return NotFound();
+            return NotFound();
 		}
 
 		[HttpPost]

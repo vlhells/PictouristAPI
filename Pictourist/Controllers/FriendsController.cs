@@ -45,15 +45,12 @@ namespace PictouristAPI.Controllers
 		[HttpPost]
 		public async Task<IActionResult> AddFriendAsync(string authedUserName, Guid Id)
 		{
-			if (Id != null && authedUserName != null)
-			{
-				var result = await _friendsService.AddFriendAsync(authedUserName, Id);
+            var result = await _friendsService.AddFriendAsync(authedUserName, Id);
 
-				if (result != null)
-				{
-					return Ok(result);
-				}
-			}
+            if (result != null)
+            {
+                return Ok(result);
+            }
             return BadRequest(_badReqGuidName);
         }
 

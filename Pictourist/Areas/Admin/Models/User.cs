@@ -5,18 +5,14 @@ namespace PictouristAPI.Areas.Admin.Models
 {
     public class User : IdentityUser
     {
-        //public int Id { get; private set; }
         //public Role Role { get; private set; }
-        //public string Login { get; private set; }
         //public Email Email { get; private set; }
-        //public string Password { get; private set; }
 
         //public Birthdate Birthdate { get; private set; }
         public string Birthdate { get; private set; }
 
         public List<User> Friends { get; } = new();
-
-        //public List<string> PicturesPaths { get; } = new List<string>();
+        public List<Picture> Pictures { get; set; }
 
         //private List<string> _friends;
 
