@@ -10,9 +10,8 @@
 	You can test ready functions via localhost:port/swagger
 	More information in /Docs folder.
 	
-## Swagger previews:
-![alt text](swaggerPreviews/previewSwagger.PNG "swagger preview")
-![alt text](swaggerPreviews/previewSwagger_2.PNG "swagger preview 2")
+## Swagger preview:
+![alt text](previewSwagger.PNG "swagger preview")
 
 ## Инструкция по развёртке, самый простой вариант:
 	1) Скачать на компьютер Visual Studio (2019/2022 - за более ранние версии не ручаюсь).
