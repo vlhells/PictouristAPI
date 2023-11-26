@@ -13,9 +13,9 @@ namespace PictouristAPI
 		{
 			//TODO:
 
-			// Usings and db instance think.
 			// Chattin w/ Signal(?)
 			// Likes/Comms.
+			// Docs.
 
 			//Refactor.
 

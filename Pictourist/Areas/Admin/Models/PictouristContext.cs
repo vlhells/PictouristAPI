@@ -24,12 +24,5 @@ namespace PictouristAPI.Areas.Admin.Models
 				.HasMany(e => e.Pictures)
 				.WithMany();
 		}
-
-		//protected override void OnModelCreating(ModelBuilder builder)
-		//{
-		//    builder.Entity<User>()
-		//    .Metadata.FindNavigation(nameof(User.UserPhotos))
-		//    .SetPropertyAccessMode(PropertyAccessMode.Field);
-		//}
 	}
 }
