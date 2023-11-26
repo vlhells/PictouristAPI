@@ -9,6 +9,8 @@ In case of input errors, comments and/or corresponding error codes are returned.
 ### The error may occur if  
 enter a simple password of type 123. In ASP.NET Identity has a password validator by default, which will not miss such tricks. The password must contain special characters, letters, numbers,
 different case.
+### Uploaded images  
+can be found in the directory specified in appsettings.json (the path is configurable).  
 
 ## About comments:
 
