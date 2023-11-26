@@ -81,7 +81,8 @@ namespace PictouristAPI.Services
 							Picture p = new Picture
 							{
 								//FirstLoaderGuid = loaderGuid, -- for no-duplicating case.
-								PathToFile = $"./{file.FileName}"
+								PathToFile = $"./{file.FileName}",
+								PictureDescription = string.Empty
 							};
 							user.Pictures.Add(p);
 							await _db.Pictures.AddAsync(p);
@@ -134,6 +135,25 @@ namespace PictouristAPI.Services
 						{
 							await _db.SaveChangesAsync();
 						}
+						return true;
+					}
+				}
+			}
+			return false;
+		}
+
+		public async Task<bool> EditPictureDescAsync(string pictureId, string actionerId, string newDescription)
+		{
+			if (pictureId != null && actionerId != null)
+			{
+				var user = await _db.Users.Include(u => u.Pictures).FirstOrDefaultAsync(u => u.Id == actionerId);
+				var picture = await _db.Pictures.FirstOrDefaultAsync(p => p.Id == int.Parse(pictureId));
+				if (user != null && picture != null)
+				{
+					if (user.Pictures.Contains(picture))
+					{
+						picture.PictureDescription = newDescription;
+						await _db.SaveChangesAsync();
 						return true;
 					}
 				}

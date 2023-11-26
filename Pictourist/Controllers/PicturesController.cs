@@ -66,6 +66,17 @@ namespace PictouristAPI.Controllers
 
 			return NotFound();
 		}
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(string pictureId, string actionerId, string newDescription)
+        {
+            var result = await _picturesService.EditPictureDescAsync(pictureId, actionerId, newDescription);
+            if (result)
+            {
+                return Ok("Successfully edited pictures' description");
+            }
+            return BadRequest();
+        }
 	}
 }
 

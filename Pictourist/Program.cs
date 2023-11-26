@@ -13,7 +13,7 @@ namespace PictouristAPI
 		{
 			//TODO:
 
-			// Chattin w/ Signal(?)
+			// Chattin w/ SignalR.
 			// Likes/Comms.
 			// Docs.
 
