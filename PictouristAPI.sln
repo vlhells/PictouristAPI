@@ -7,6 +7,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PictouristAPI", "Pictourist
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{C6C8A831-3299-407D-933B-83582DE280D0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "Pictourist.Tests\UnitTests\UnitTests.csproj", "{C2D88523-2F01-4F2D-B28C-83B3A11AE182}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Pictourist.Tests", "Pictourist.Tests", "{B26A5546-C57E-457E-85DF-5C25695F8E94}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,9 +25,16 @@ Global
 		{C6C8A831-3299-407D-933B-83582DE280D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C6C8A831-3299-407D-933B-83582DE280D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C6C8A831-3299-407D-933B-83582DE280D0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C2D88523-2F01-4F2D-B28C-83B3A11AE182}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C2D88523-2F01-4F2D-B28C-83B3A11AE182}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C2D88523-2F01-4F2D-B28C-83B3A11AE182}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C2D88523-2F01-4F2D-B28C-83B3A11AE182}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{C2D88523-2F01-4F2D-B28C-83B3A11AE182} = {B26A5546-C57E-457E-85DF-5C25695F8E94}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {079741D7-F216-459A-A14B-373A8952EE2C}
