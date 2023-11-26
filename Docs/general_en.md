@@ -6,7 +6,7 @@ Read the text below)
 In general, data is fed to Swagger (as from a pseudo-frontend): the guid or the name of the user on whose behalf the action is being performed, the guid of the person to whom the action is directed,
 the id (if we are talking about the picture), as well as parameters (description of the picture, etc.). If the data is entered correctly, then the action executed successfully.  
 In case of input errors, comments and/or corresponding error codes are returned.  
-###The error may occur if  
+### The error may occur if  
 enter a simple password of type 123. In ASP.NET Identity has a password validator by default, which will not miss such tricks. The password must contain special characters, letters, numbers,
 different case.
 

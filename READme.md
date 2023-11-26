@@ -1,12 +1,16 @@
 ## ru:
 	Это — backend для мини социальной сети типа Instagram для обмена фотографиями.
 	В настоящее время проект всё ещё разрабатывается.
+	В настоящий момент готов функционал админ-панели, регистрации, авторизаций, добавления в друзья, просмотра всего этого,  
+	а также загрузки картинок, их удаления и редактирования их описания.  
 	Готовый функционал можно протестировать по пути localhost:port/swagger
 	Подробнее - в папке /Docs.
 
 ## en: 
 	This is a backend for mini social web like Instagram for photo exchange.
 	Now still WIP.
+	At the moment, the functionality of the admin panel, registration, authorization, adding friends, viewing all this,
+	as well as uploading images, deleting them and editing their descriptions is ready.  
 	You can test ready functions via localhost:port/swagger
 	More information in /Docs folder.
 	

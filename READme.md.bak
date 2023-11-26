@@ -1,6 +1,8 @@
 ## ru:
 	Это — backend для мини социальной сети типа Instagram для обмена фотографиями.
 	В настоящее время проект всё ещё разрабатывается.
+	В настоящий момент готов функционал админ-панели, регистрации, авторизаций, добавления в друзья, просмотра всего этого,  
+	а также загрузки картинок, их удаления и редактирования их описания.  
 	Готовый функционал можно протестировать по пути localhost:port/swagger
 	Подробнее - в папке /Docs.
 
@@ -10,8 +12,9 @@
 	You can test ready functions via localhost:port/swagger
 	More information in /Docs folder.
 	
-## Swagger preview:
-![alt text](previewSwagger.PNG "swagger preview")
+## Swagger previews:
+![alt text](swaggerPreviews/previewSwagger.PNG "swagger preview")
+![alt text](swaggerPreviews/previewSwagger_2.PNG "swagger preview 2")
 
 ## Инструкция по развёртке, самый простой вариант:
 	1) Скачать на компьютер Visual Studio (2019/2022 - за более ранние версии не ручаюсь).
