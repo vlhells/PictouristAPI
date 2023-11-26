@@ -8,11 +8,14 @@ namespace PictouristAPI.Controllers
     public class PicturesController : Controller
     {
         private IPicturesService _picturesService;
+        private string _notAuthorized;
 
-        public PicturesController(IPicturesService picturesService)
+
+		public PicturesController(IPicturesService picturesService)
         {
             _picturesService = picturesService;
-        }
+			_notAuthorized = "No access rights to perform this action or incorrect picture id.";
+		}
 
         [HttpPost]
         public async Task<IActionResult> LoadPic(FormFileCollection files, string loaderGuid)
@@ -40,7 +43,7 @@ namespace PictouristAPI.Controllers
                 return BadRequest(preRes);
             }
 
-            return NoContent();
+            return NoContent(); // this return should be never achieved.
 		}
 
         [HttpGet]
@@ -52,7 +55,7 @@ namespace PictouristAPI.Controllers
                 return Ok(result);
             }
 
-            return NotFound();
+            return NotFound("No user with this user id.");
         }
 
 		[HttpPost]
@@ -64,7 +67,7 @@ namespace PictouristAPI.Controllers
 				return Ok("Successfully deleted picture.");
 			}
 
-			return NotFound();
+			return NotFound(_notAuthorized);
 		}
 
         [HttpPost]
@@ -75,7 +78,7 @@ namespace PictouristAPI.Controllers
             {
                 return Ok("Successfully edited pictures' description");
             }
-            return BadRequest();
+            return BadRequest(_notAuthorized);
         }
 	}
 }

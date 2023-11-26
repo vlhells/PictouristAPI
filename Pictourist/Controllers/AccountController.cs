@@ -38,7 +38,7 @@ namespace PictouristAPI.Controllers
 			//	errors += "Неверный пароль";
 			//}
 
-			return BadRequest("Incorrect data.");
+			return BadRequest("Incorrect input.");
 		}
 
 		[HttpGet]

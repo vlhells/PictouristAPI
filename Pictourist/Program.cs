@@ -15,9 +15,6 @@ namespace PictouristAPI
 
 			// Chattin w/ SignalR.
 			// Likes/Comms.
-			// Docs.
-
-			//Refactor.
 
 			var builder = WebApplication.CreateBuilder();
 

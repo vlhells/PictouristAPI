@@ -59,7 +59,7 @@ namespace PictouristAPI.Admin.Controllers
             {
                 return RedirectToAction("Index");
             }
-            return NotFound("Incorrect role id");
+            return NotFound("No user found with this id.");
         }
 
         [HttpGet]
@@ -72,7 +72,7 @@ namespace PictouristAPI.Admin.Controllers
         }
 
 		[HttpGet]
-		public async Task<IActionResult> EditAsync(string userId) // ...
+		public async Task<IActionResult> EditAsync(string userId)
         {
             var model = await _rolesService.EditAsync(userId);
             if (model != null)
@@ -80,7 +80,7 @@ namespace PictouristAPI.Admin.Controllers
                 return new ObjectResult(model);
             }
 
-            return NotFound();
+            return NotFound("No user found with this id.");
         }
 
         [HttpPost]
@@ -92,7 +92,7 @@ namespace PictouristAPI.Admin.Controllers
                 return RedirectToAction("UserList");
             }
 
-            return NotFound();
+            return NotFound("No user found with this id.");
         }
     }
 }

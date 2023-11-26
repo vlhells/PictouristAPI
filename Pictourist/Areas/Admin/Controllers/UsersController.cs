@@ -30,7 +30,7 @@ namespace PictouristAPI.Areas.Admin.Controllers
                 ChangePasswordViewModel model = new ChangePasswordViewModel { Id = user.Id, Email = user.Email };
                 return new ObjectResult(model);
             }
-            return NotFound();
+            return NotFound("No user found with this id.");
 		}
 
 		[HttpPost]
@@ -101,7 +101,7 @@ namespace PictouristAPI.Areas.Admin.Controllers
                 EditUserViewModel model = new EditUserViewModel { Email = user.Email, Login = user.UserName, Birthdate = user.Birthdate };
                 return new ObjectResult(model);
             }
-            return NotFound();
+            return NotFound("No user found with this id.");
 		}
 
 		[HttpPost]
@@ -135,7 +135,7 @@ namespace PictouristAPI.Areas.Admin.Controllers
 			{
 				return RedirectToAction("Index");
 			}
-			return NotFound();
+			return NotFound("No user found with this id.");
 		}
 	}
 }
