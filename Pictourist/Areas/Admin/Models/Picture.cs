@@ -7,7 +7,7 @@ namespace PictouristAPI.Areas.Admin.Models
     public class Picture
 	{
 		[Key]
-		public int Id { get; private set; }
+		public int Id { get; set; }
 		//public string FirstLoaderGuid { get; set; } // for unique picture-case. Look at PicturesService LoadPic-method.
 		public string PathToFile { get; set; }
 		public string PictureDescription { get; set; }
